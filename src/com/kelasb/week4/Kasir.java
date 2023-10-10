@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.kelasb.week4;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -15,6 +18,12 @@ public class Kasir extends javax.swing.JFrame {
      */
     public Kasir() {
         initComponents();
+        
+//        try {
+//            Connection c = Koneksi.hubungkan();
+//        } catch (Exception e) {
+//        }
+        
     }
 
     /**
@@ -30,6 +39,8 @@ public class Kasir extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -79,12 +90,37 @@ public class Kasir extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-        
+        try {
+            String id = jTextField1.getText();
+            String query = "SELECT * FROM `produk` WHERE kode='"+id+"'";
+            Connection c = Koneksi.hubungkan();
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {                 
+                int kode = rs.getInt("kode");
+                String nama = rs.getString("nama");
+                int harga = rs.getInt("harga");
+                int qty = rs.getInt("qty");  
+                jTextArea1.append("\nNama Produk: "+nama); 
+                jTextArea1.append("\nHarga: "+harga); 
+                jTextArea1.append("\nQTY: "+qty);  
+            }
+            
+            
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
@@ -126,6 +162,8 @@ public class Kasir extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
